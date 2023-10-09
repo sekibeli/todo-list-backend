@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -31,4 +31,22 @@ class LoginView(ObtainAuthToken):
             'email': user.email
         })
         
+class TodoOneItemView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]  #permissions.IsAdminUser
+    
+    # def get(self, request, format=None):
+    #     todos =  TodoItem.objects.filter(author=request.user)
+    #     serializer = TodoItemSerializer(todos, many=True)
+    #     return Response(serializer.data)
+    
+    def get(self, request, todo_id=None, format=None):
+        if todo_id:
+             todo = get_object_or_404(TodoItem, id=todo_id, author=request.user)
+             serializer = TodoItemSerializer(todo)
+        else:
+             todos = TodoItem.objects.filter(author=request.user)
+             serializer = TodoItemSerializer(todos, many=True)
 
+        return Response(serializer.data)
+    
