@@ -11,10 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 class TodoItemView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]#permissions.IsAdminUser
+    permission_classes = [IsAuthenticated]  #permissions.IsAdminUser
     
     def get(self, request, format=None):
-        todos =  TodoItem.objects.all()
+        todos =  TodoItem.objects.filter(author=request.user)
         serializer = TodoItemSerializer(todos, many=True)
         return Response(serializer.data)
 
