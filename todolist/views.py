@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import TodoItem
 from .serializers import TodoItemSerializer
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -31,7 +32,27 @@ class LoginView(ObtainAuthToken):
             'email': user.email
         })
         
-class TodoOneItemView(APIView):
+class AddTodoView(generics.CreateAPIView):
+    queryset = TodoItem.objects.all()
+    serializer_class = TodoItemSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def create(self, request, *args, **kwargs):
+        # Du könntest hier zusätzliche Logik hinzufügen, wenn du möchtest, z. B.:
+        # request.data['author'] = request.user.id
+        # Beachte jedoch, dass dies von deinem Datenmodell und deinen Anforderungen abhängt.
+
+        return super(AddTodoView, self).create(request, *args, **kwargs)
+
+    # def post(self, request):
+    #     serializer = TodoItemSerializer(data=request.data)
+   
+    def perform_create(self, serializer):
+        # Dies stellt sicher, dass der Autor des Todo-Items der aktuell eingeloggte Benutzer ist
+        serializer.save(author=self.request.user)    
+        
+class SingleTodoItemView(APIView):  # Ein einzelner Todo wird angezeigt
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]  #permissions.IsAdminUser
     
@@ -49,4 +70,6 @@ class TodoOneItemView(APIView):
              serializer = TodoItemSerializer(todos, many=True)
 
         return Response(serializer.data)
+    
+
     

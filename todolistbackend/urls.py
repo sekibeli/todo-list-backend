@@ -18,12 +18,14 @@ from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.db import router
 from django.urls import path
-from todolist.views import LoginView, TodoItemView, TodoOneItemView
+from todolist.views import AddTodoView, LoginView, TodoItemView, SingleTodoItemView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(), name='login'),
     path('todos/', TodoItemView.as_view(), name='todoItemView'),
-    path('todo/<int:todo_id>/', TodoOneItemView.as_view(), name='todoOneItemView'),
+    path('todo/<int:todo_id>/', SingleTodoItemView.as_view(), name='singleTodoItemView'),
+    path('todo/addTodo/', AddTodoView.as_view(), name='addTodoView'),
+
 ]
