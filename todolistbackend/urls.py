@@ -18,7 +18,7 @@ from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.db import router
 from django.urls import path
-from todolist.views import AddTodoView, LoginView, TodoItemView, SingleTodoItemView
+from todolist.views import AddTodoView, LoginView, TodoItemView, SingleTodoItemView, DeleteTodoView
 
 
 urlpatterns = [
@@ -27,5 +27,6 @@ urlpatterns = [
     path('todos/', TodoItemView.as_view(), name='todoItemView'),
     path('todo/<int:todo_id>/', SingleTodoItemView.as_view(), name='singleTodoItemView'),
     path('todo/addTodo/', AddTodoView.as_view(), name='addTodoView'),
+    path('todo/delete/<int:pk>/', DeleteTodoView.as_view(), name='deleteTodoView' ),
 
 ]
