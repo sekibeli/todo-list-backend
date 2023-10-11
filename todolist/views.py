@@ -67,20 +67,18 @@ class DeleteTodoView(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
     
-class UpdateName(generics.UpdateAPIView):
+class UpdateTodoView(generics.UpdateAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]  #permissions.IsAdminUser
+    permission_classes = [IsAuthenticated]  
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer    
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.title = request.data.get("title")
-        instance.checked = request.data.get("checked")
-        instance.save()
-
-        serializer = self.get_serializer(instance)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        print(request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
+        serializer.save()
         return Response(serializer.data)
+
+ 
