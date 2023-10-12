@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1'
-    # 'bekiseli.pythonanywhere.com'
+    'bekiseli.pythonanywhere.com'
 ]
 
 CORS_ALLOWED_ORIGINS = [
